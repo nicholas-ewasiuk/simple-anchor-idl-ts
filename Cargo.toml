@@ -1,0 +1,18 @@
+[package]
+name = "simple-anchor-idl-ts"
+version = "0.1.0"
+edition = "2021"
+authors = ["Nick Ewasiuk <ewasiuk.nick@gmail.com>"]
+description = "A tool for generating a typescript file from an Anchor IDL json file."
+license = "MIT OR Apache-2.0"
+keywords = ["cli", "solana", "anchor", "idl"]
+categories = ["command-line-utilities"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anchor-idl = "0.3.1"
+anyhow = "1.0.79"
+clap = { version = "4.0", features = ["derive"] }
+heck = "0.4.1"
+serde_json = { version = "1.0", default-features = false, features = ["alloc"] }
