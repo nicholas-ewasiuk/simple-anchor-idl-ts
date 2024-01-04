@@ -6,9 +6,10 @@ use anyhow::{Context, Result};
 #[derive(Parser)]
 struct Cli {
     /// The path to the json file to convert.
-    file: std::path::PathBuf,
-    /// The directory to save the output file.
-    output: std::path::PathBuf,
+    path: std::path::PathBuf,
+    /// The directory to save the output file. Defaults to dir of json file.
+    #[arg(short, long)]
+    outdir: Option<std::path::PathBuf>,
 }
 
 pub fn idl_ts(idl: &Idl) -> Result<String, std::io::Error> {
@@ -31,11 +32,19 @@ export const IDL: {} = {};
 
 fn main() -> Result<()> {
     let args = Cli::parse();
-    let bytes = std::fs::read(&args.file).with_context(|| format!("could not read file `{}`", args.file.display()))?;
+    let bytes = std::fs::read(&args.path).with_context(|| format!("could not read file `{}`", args.path.display()))?;
     let idl: Idl = serde_json::from_reader(&*bytes).expect("Invalid IDL format.");
-    let ts_idl = idl_ts(&idl)?; 
+    let ts_idl = idl_ts(&idl)?;
+    
+    let mut default_path = args.path;
+    default_path.pop();
 
-    let ts_out = std::path::PathBuf::from(&args.output.join(&idl.name).with_extension("ts"));
+    let out = match args.outdir {
+        None => default_path,
+        Some(path) => path,
+    };
+
+    let ts_out = std::path::PathBuf::from(out.join(&idl.name).with_extension("ts"));
 
     std::fs::write(&ts_out, ts_idl)?;
     println!("file created at: {}", ts_out.display());
