@@ -1,6 +1,6 @@
 [package]
 name = "simple-anchor-idl-ts"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2021"
 authors = ["Nick Ewasiuk <ewasiuk.nick@gmail.com>"]
 description = "A tool for generating a typescript file from an Anchor IDL json file."
